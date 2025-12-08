@@ -1,0 +1,121 @@
+/* Remove all animations, transitions and smooth scrolling */
+*,
+*::before,
+*::after {
+  animation: none !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition: none !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+  -webkit-animation: none !important;
+  -webkit-transition: none !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+/* Remove hover effects */
+.hover\:bg-gray-50:hover,
+.hover\:bg-indigo-700:hover,
+.hover\:bg-indigo-200:hover,
+.hover\:text-indigo-500:hover,
+.hover\:bg-gray-100:hover {
+  background-color: inherit !important;
+  color: inherit !important;
+  transform: none !important;
+}
+
+/* Remove focus rings and outlines */
+*:focus,
+*:focus-visible,
+*:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: inherit !important;
+}
+
+/* Remove button hover states */
+button:hover,
+a:hover {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Remove input focus states */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  box-shadow: none !important;
+  border-color: #d1d5db !important; /* gray-300 */
+}
+
+/* Remove all transitions */
+* {
+  transition: none !important;
+  transition-property: none !important;
+  --tw-translate-x: 0 !important;
+  --tw-translate-y: 0 !important;
+  --tw-rotate: 0 !important;
+  --tw-skew-x: 0 !important;
+  --tw-skew-y: 0 !important;
+  --tw-scale-x: 1 !important;
+  --tw-scale-y: 1 !important;
+  transform: none !important;
+}
+
+/* Hide Material-UI CircularProgress and replace with text */
+.MuiCircularProgress-root,
+[class*="MuiCircularProgress"],
+[class^="MuiCircularProgress"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Show loading text instead of spinner */
+.loading-text {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  width: auto !important;
+  height: auto !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Hide any SVG animations */
+svg[class*="MuiCircularProgress"],
+svg[class^="MuiCircularProgress"],
+.MuiCircularProgress-svg,
+.MuiCircularProgress-circle,
+.MuiCircularProgress-circleDisableShrink,
+.MuiCircularProgress-circleIndeterminate,
+.MuiCircularProgress-circleDeterminate {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Ensure no rotation or transform animations */
+@keyframes MuiCircularProgress-keyframes-circular-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes MuiCircularProgress-keyframes-circular-dash {
+  0% { stroke-dasharray: 0, 400; }
+  100% { stroke-dasharray: 0, 400; }
+}
