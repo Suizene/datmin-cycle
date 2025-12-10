@@ -2,6 +2,9 @@
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const emailService = require('../services/emailService');
+const { Sequelize } = require('sequelize');
 
 // Validasi email
 const isEmail = (email) => {
@@ -120,6 +123,126 @@ exports.login = async (req, res) => {
     res.status(500).json({ 
       success: false,
       message: 'Terjadi kesalahan saat login' 
+    });
+  }
+};
+
+// Forgot Password
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Email harus diisi' 
+      });
+    }
+
+    // Cari user berdasarkan email
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      // Return success message even if email doesn't exist for security
+      return res.status(200).json({ 
+        success: true,
+        message: 'Jika email terdaftar, instruksi reset password akan dikirim ke email Anda' 
+      });
+    }
+
+    // Generate secure reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    
+    // Set token dan expiry (1 jam dari sekarang)
+    const resetTokenExpiry = new Date();
+    resetTokenExpiry.setHours(resetTokenExpiry.getHours() + 1);
+
+    // Simpan token ke database
+    await user.update({
+      resetToken,
+      resetTokenExpiry
+    });
+
+    // Kirim email reset password
+    try {
+      await emailService.sendPasswordResetEmail(user.email, resetToken, user.name);
+    } catch (emailError) {
+      console.error('Gagal mengirim email:', emailError);
+      // Tetap lanjutkan karena ini bukan error kritis
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Mengarahkan ke halaman reset password...',
+      resetToken: resetToken // Selalu kirim token untuk frontend
+    });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan server'
+    });
+  }
+};
+
+// Reset Password
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, password, confirmPassword } = req.body;
+
+    // Validasi input
+    if (!token || !password || !confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token, password, dan konfirmasi password harus diisi'
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password dan konfirmasi password tidak cocok'
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'Password minimal 6 karakter'
+      });
+    }
+
+    // Cari user berdasarkan token
+    const user = await User.findOne({
+      where: {
+        resetToken: token,
+        resetTokenExpiry: { [Sequelize.Op.gt]: new Date() }
+      }
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token tidak valid atau sudah kadaluarsa'
+      });
+    }
+
+    // Update password user
+    user.password = password;
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password berhasil direset. Silakan login dengan password baru Anda.'
+    });
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Terjadi kesalahan server'
     });
   }
 };

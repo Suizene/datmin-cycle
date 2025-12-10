@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const authRoutes = require('./routes/auth');
 const motorcycleRoutes = require('./routes/motorcycles');
 const db = require('./models');
@@ -19,6 +20,11 @@ app.options('*', cors(corsOptions));
 
 // Middleware
 app.use(express.json());
+
+// Set view engine for email templates
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'templates'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

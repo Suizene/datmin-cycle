@@ -9,6 +9,8 @@ import Layout from './components/Layout';
 // Auth Pages
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 
 // App Pages
 import Dashboard from './pages/dashboard/Dashboard';
@@ -72,6 +74,16 @@ function AppContent() {
       <Route
         path="/register"
         element={!isAuthenticated ? <Register /> : <Navigate to="/" replace />}
+      />
+
+      <Route
+        path="/forgot-password"
+        element={!isAuthenticated ? <ForgotPassword /> : <Navigate to="/" replace />}
+      />
+      
+      <Route
+        path="/reset-password"
+        element={!isAuthenticated ? <ResetPassword /> : <Navigate to="/" replace />}
       />
 
       {/* Protected Routes */}
