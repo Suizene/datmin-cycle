@@ -18,8 +18,14 @@ const ForgotPassword = () => {
       setLoading(true);
       
       const response = await authApi.forgotPassword({ email });
-      // Redirect ke halaman reset password dengan token
-      navigate(`/reset-password?token=${response.data.resetToken}`);
+      // Gunakan URL reset dari backend atau buat sendiri
+      const resetUrl = response.data.resetUrl || `/auth/reset-password?token=${response.data.resetToken}`;
+      // Redirect ke URL reset
+      if (resetUrl.startsWith('http')) {
+        window.location.href = resetUrl;
+      } else {
+        navigate(resetUrl);
+      }
     } catch (err) {
       console.error('Forgot password error:', err);
       setError(err.response?.data?.message || 'Gagal mengirim permintaan reset password');

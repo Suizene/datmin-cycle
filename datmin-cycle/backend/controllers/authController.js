@@ -162,18 +162,24 @@ exports.forgotPassword = async (req, res) => {
       resetTokenExpiry
     });
 
-    // Kirim email reset password
-    try {
-      await emailService.sendPasswordResetEmail(user.email, resetToken, user.name);
-    } catch (emailError) {
-      console.error('Gagal mengirim email:', emailError);
-      // Tetap lanjutkan karena ini bukan error kritis
+    // Generate reset URL based on environment
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseUrl = isProduction 
+      ? 'https://your-production-url.com' 
+      : 'http://localhost:3000';
+    const resetUrl = `${baseUrl}/auth/reset-password?token=${resetToken}`;
+    
+    // Log for development
+    if (!isProduction) {
+      console.log('Reset URL:', resetUrl);
+      console.log('Reset Token:', resetToken);
     }
 
     res.status(200).json({
       success: true,
       message: 'Mengarahkan ke halaman reset password...',
-      resetToken: resetToken // Selalu kirim token untuk frontend
+      resetToken: resetToken, // Selalu kirim token untuk frontend
+      resetUrl: resetUrl     // Kirim juga URL lengkap untuk memudahkan
     });
 
   } catch (error) {
