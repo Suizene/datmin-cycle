@@ -17,14 +17,33 @@ const ForgotPassword = () => {
       setMessage('');
       setLoading(true);
       
-      const response = await authApi.forgotPassword({ email });
-      // Gunakan URL reset dari backend atau buat sendiri
-      const resetUrl = response.data.resetUrl || `/auth/reset-password?token=${response.data.resetToken}`;
-      // Redirect ke URL reset
-      if (resetUrl.startsWith('http')) {
-        window.location.href = resetUrl;
-      } else {
-        navigate(resetUrl);
+      setLoading(true);
+      try {
+        const response = await authApi.forgotPassword({ email });
+        
+        if (response.data.success) {
+          // Gunakan URL reset dari backend atau buat sendiri
+          const resetUrl = response.data.resetUrl || `/auth/reset-password?token=${response.data.resetToken}`;
+          
+          // Tampilkan pesan sukses
+          setMessage('Link reset password telah dikirim ke email Anda');
+          
+          // Redirect setelah 2 detik
+          setTimeout(() => {
+            if (resetUrl.startsWith('http')) {
+              window.location.href = resetUrl;
+            } else {
+              navigate(resetUrl);
+            }
+          }, 2000);
+        } else {
+          setError(response.data.message || 'Gagal mengirim permintaan reset password');
+        }
+      } catch (err) {
+        console.error('Forgot password error:', err);
+        setError(err.response?.data?.message || 'Gagal mengirim permintaan reset password');
+      } finally {
+        setLoading(false);
       }
     } catch (err) {
       console.error('Forgot password error:', err);

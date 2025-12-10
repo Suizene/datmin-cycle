@@ -71,7 +71,15 @@ export const authApi = {
   getProfile: () => api.get('/auth/me'),
   updateProfile: (data) => api.put('/auth/me', data),
   changePassword: (data) => api.put('/auth/change-password', data),
-  forgotPassword: (data) => api.post('/auth/forgot-password', data),
+  forgotPassword: async (data) => {
+    try {
+      const response = await api.post('/auth/forgot-password', data);
+      return response;
+    } catch (error) {
+      console.error('Forgot password API error:', error.response?.data || error.message);
+      throw error;
+    }
+  },
   resetPassword: (data) => api.post('/auth/reset-password', data),
 };
 
