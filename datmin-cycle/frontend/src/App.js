@@ -104,6 +104,16 @@ function AppContent() {
             </PrivateRoute>
           }
         />
+        
+        {/* Redirect /motorcycles/new to /motorcycles/add for backward compatibility */}
+        <Route
+          path="motorcycles/new"
+          element={
+            <PrivateRoute>
+              <Navigate to="/motorcycles/add" replace />
+            </PrivateRoute>
+          }
+        />
 
         {/* Motorcycle Detail */}
         <Route
