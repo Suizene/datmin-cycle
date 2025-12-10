@@ -4,6 +4,7 @@
   "description": "Backend for Datmin Cycle - Motorcycle Parts Tracker",
   "main": "server.js",
   "scripts": {
+    "migrate:fix": "npx sequelize-cli db:migrate --migrations-path=migrations --config=config/config.json --env=production",
     "start": "node server.js",
     "dev": "nodemon server.js",
     "migrate": "sequelize-cli db:migrate",
