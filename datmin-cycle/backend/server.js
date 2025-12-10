@@ -7,13 +7,15 @@ const db = require('./models');
 
 const app = express();
 
-// CORS Configuration
+// CORS Configuration (allow all origins for now, including Netlify)
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: true,
   credentials: true,
   optionsSuccessStatus: 200
 };
+
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Middleware
 app.use(express.json());
