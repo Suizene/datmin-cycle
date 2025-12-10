@@ -13,11 +13,21 @@ router.post('/login', authController.login);
 // Register (public)
 router.post('/register', authController.register);
 
-// Forgot Password (public)
-router.post('/forgot-password', authController.forgotPassword);
+// Forgot Password (public) - Sementara dinonaktifkan
+router.post('/forgot-password', (req, res) => {
+  return res.status(503).json({
+    success: false,
+    message: 'Fitur lupa sandi sedang dalam perbaikan. Silakan hubungi admin.'
+  });
+});
 
-// Reset Password (public)
-router.post('/reset-password', authController.resetPassword);
+// Reset Password (public) - Sementara dinonaktifkan
+router.post('/reset-password', (req, res) => {
+  return res.status(503).json({
+    success: false,
+    message: 'Fitur reset sandi sedang dalam perbaikan. Silakan hubungi admin.'
+  });
+});
 
 // Route untuk migrasi (sementara, hapus setelah digunakan)
 router.get('/migrate-reset-token', async (req, res) => {

@@ -1,10 +1,14 @@
 require('dotenv').config();
 const { Sequelize } = require('sequelize');
 
-// Gunakan DATABASE_URL dari environment variable
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+// Konfigurasi koneksi langsung
+const sequelize = new Sequelize({
+  database: 'railway',
+  username: 'postgres',
+  password: 'CjczLJFbRLgcIaeObLVEvZmqHgNwEPZa',
+  host: 'postgres.railway.internal',
+  port: 5432,
   dialect: 'postgres',
-  protocol: 'postgres',
   logging: console.log,
   dialectOptions: {
     ssl: {

@@ -18,9 +18,12 @@
     "logging": false
   },
   "production": {
-    "url": "${DATABASE_URL}",
+    "host": "postgres.railway.internal",
+    "port": 5432,
+    "username": "postgres",
+    "password": "CjczLJFbRLgcIaeObLVEvZmqHgNwEPZa",
+    "database": "railway",
     "dialect": "postgres",
-    "protocol": "postgres",
     "logging": false,
     "dialectOptions": {
       "ssl": {
