@@ -165,7 +165,7 @@ exports.forgotPassword = async (req, res) => {
     // Generate reset URL based on environment
     const isProduction = process.env.NODE_ENV === 'production';
     const baseUrl = isProduction 
-      ? 'https://your-production-url.com' 
+      ? 'https://datmin-cycle.vercel.app' 
       : 'http://localhost:3000';
     const resetUrl = `${baseUrl}/auth/reset-password?token=${resetToken}`;
     
