@@ -36,15 +36,11 @@ exports.register = async (req, res) => {
       });
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Buat user baru
+    // Buat user baru (hashing ditangani oleh model hook)
     user = await User.create({ 
       name, 
       email, 
-      password: hashedPassword 
+      password 
     });
 
     // Generate token
