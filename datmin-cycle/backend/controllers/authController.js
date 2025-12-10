@@ -85,11 +85,16 @@ exports.login = async (req, res) => {
     }
 
     // Cek user
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ 
+      where: { email },
+      attributes: { exclude: ['resetToken', 'resetTokenExpiry'] } // Skip kolom yang bermasalah
+    });
+    
     if (!user) {
+      console.log('Login attempt with non-existent email:', email);
       return res.status(401).json({ 
         success: false,
-        message: 'Email atau password salah' 
+        message: 'Email atau password salah' // Pesan umum untuk keamanan
       });
     }
 

@@ -19,15 +19,16 @@ module.exports = (sequelize) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    resetToken: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    resetTokenExpiry: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
+    // Kolom resetToken sementara dinonaktifkan
+    // resetToken: {
+    //   type: DataTypes.STRING,
+    //   allowNull: true
+    // },
+    // resetTokenExpiry: {
+    //   type: DataTypes.DATE,
+    //   allowNull: true
+    // }
   }, {
     hooks: {
       beforeCreate: async (user) => {
